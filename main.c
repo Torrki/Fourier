@@ -11,6 +11,7 @@ void alrmAction(int sig);
 fftw_plan p;
 
 int main(int argc, char *argv[]){
+	#ifndef GUI
 	MyPCM *pcm=NULL;
 	size_t framesLetti=0;
 	if( InitPCM(&pcm) < 0){
@@ -37,11 +38,18 @@ int main(int argc, char *argv[]){
 	while(framesLetti < (pcm->fcamp)*5.0){
 		framesLetti+=ReadPCM(pcm, bufferAudio);
 	}
-	
+	printf("%lu\n", framesLetti);
 	timer_delete(idTimer);
 	fftw_destroy_plan(p); //elimina automaticamente bufferAudio e out
 	DelPCM(pcm);
 	return 0;
+	#else
+	GtkApplication *app=gtk_application_new("GTK.Fourier", G_APPLICATION_FLAGS_NONE);
+	g_signal_connect(app, "activate", G_CALLBACK(InitWin), NULL);
+	int status=g_application_run(G_APPLICATION(app), argc, argv);
+	g_object_unref(app);
+	return status;
+	#endif
 }
 
 void alrmAction(int sig){
