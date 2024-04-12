@@ -1,5 +1,4 @@
 #include <alsa/asoundlib.h>
-#include <stdlib.h>
 
 typedef struct _MyPCM{
 	snd_pcm_t *handlePCM;
@@ -12,3 +11,6 @@ typedef struct _MyPCM{
 int InitPCM(MyPCM **pcm_h);
 void DelPCM(MyPCM *pcm_h);
 int ReadPCM(MyPCM *pcm_h, void* b);
+#ifdef DEBUG
+void printPCM(MyPCM *pcm_h);
+#endif
